@@ -1,0 +1,15 @@
+path: Projeto_Pratico_2/TopicosI-SoccerSum/data/Eliteserien_partitioned
+
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: Player
+  1: Goalkeeper
+  2: Referee
+  3: Ball
+  4: Logo
+  5: Penalty mark
+  6: Corner flag post
+  7: Goal net
