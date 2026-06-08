@@ -1,5 +1,4 @@
 data/Eliteserien*/**
-
 *.zip
-
 runs/detect/runs/yolo26*/weights/
+models/
