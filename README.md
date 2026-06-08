@@ -8,18 +8,31 @@ O objetivo do projeto é aplicar a arquitetura **YOLOv26** para detecção de ob
 
 ## 📁 Estrutura do Repositório
 
-- `Eliteserien/` – Dados originais organizados por ano e tipo de anotação
-- `data/dataset.yaml` – Configuração do dataset para treino/val/test
-- `src/data_preparation.py` – Script de particionamento dos dados para YOLO
-- `src/train.py` – Script de treinamento usando a biblioteca Ultralytics YOLO
-- `models/` – Modelos / pesos pré-treinados usados no treino
-- `runs/` – Resultados gerados pelos experimentos de treinamento
-- `NotebookAP2_TEC1.ipynb` – Notebook com a implementação, análise e visualizações
-- `README.md` – Documentação do projeto
+```text
+TopicosI-SoccerSum/
+│
+├── data/
+│   ├── Eliteserien/                 # Dataset bruto 
+│   ├── Eliteserien_partitioned/     # Dataset estruturado
+│   │   ├── images/                  # Frames da partida (.jpg) [train, val, test]
+│   │   └── labels/                  # Anotações em formato YOLO (.txt) [train, val, test]
+│   └── dataset.yaml                 # Configuração do mapeamento de dados e classes do YOLO
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_preparation.py          # Script de extração, split e validação dos dados
+│   ├── train.py                     # Script para disparar o treinamento da rede neural
+│   └── predict.py                   # Script para inferência e teste qualitativo com pesos .pt
+│
+├── .gitignore                       
+├── NotebookAP2_TEC1.ipynb           # Notebook de desenvolvimento e prototipagem
+└── README.md                        # Documentação do repositório
+
+```
 
 ---
 
-## 🎯 Objetivo do Projeto
+## Objetivo do Projeto
 
 Detectar e segmentar objetos em imagens de futebol usando aprendizado de máquina. O modelo identifica as classes principais presentes nos jogos da liga norueguesa **Eliteserien**.
 
@@ -36,7 +49,7 @@ Detectar e segmentar objetos em imagens de futebol usando aprendizado de máquin
 
 ---
 
-## 🔧 Fluxo de Trabalho
+## Fluxo de Trabalho
 
 ### 1. Preparação dos Dados
 
@@ -73,7 +86,7 @@ O treinamento é realizado usando a biblioteca **Ultralytics YOLO** e salva resu
 
 ---
 
-## 📌 Tecnologias e Bibliotecas
+## Tecnologias e Bibliotecas
 
 - Python 3
 - Ultralytics YOLO (YOLOv26)
@@ -84,7 +97,7 @@ O treinamento é realizado usando a biblioteca **Ultralytics YOLO** e salva resu
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Preparar o dataset
 
@@ -102,7 +115,7 @@ python src/train.py
 
 ---
 
-## 📊 Resultados Esperados
+## Resultados Esperados
 
 O projeto realiza:
 
@@ -113,7 +126,7 @@ O projeto realiza:
 
 ---
 
-## 💡 Observações
+## Observações
 
 - O dataset original está em `Eliteserien/` com imagens e anotações separadas por ano.
 - A estrutura final usada pelo treino é gerada em `data/Eliteserien_partitioned`.
@@ -121,17 +134,14 @@ O projeto realiza:
 
 ---
 
-## 👥 Autores
+## Autores
 
-- Thiago Cordeiro
-- Beatriz Guedes
-- Yago Feitoza
-- Victor Ordozgoite
-- Italo Fonseca
+| [<img src="https://github.com/thiagocordeirum.png?size=100" width=100><br><sub>Thiago Cordeiro</sub>](https://github.com/thiagocordeirum) | [<img src="https://github.com/beatrizguedes03.png?size=100" width=100><br><sub>Beatriz Guedes</sub>](https://github.com/beatrizguedes03) | [<img src="https://github.com/yagofeitoza19.png?size=100" width=100><br><sub>Yago Feitoza</sub>](https://github.com/yagofeitoza19) | [<img src="https://github.com/ordozgoite.png?size=100" width=100><br><sub>Victor Ordozgoite</sub>](https://github.com/ordozgoite) | [<img src="https://github.com/ItaloFonseca.png?size=100" width=100><br><sub>Italo Fonseca</sub>](https://github.com/ItaloFonseca)
+|:---:|:---:|:---:|:---:|:---:|
 
 ---
 
-## 👩‍🏫 Orientação
+## Orientação
 
 - **Profa. Dra. Elloá B. Guedes**
 - **Escola Superior de Tecnologia – Universidade do Estado do Amazonas (EST/UEA)**
