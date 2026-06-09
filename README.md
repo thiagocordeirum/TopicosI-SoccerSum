@@ -1,4 +1,4 @@
-﻿# Projeto Prático 2: Detecção e Segmentação em Partidas de Futebol com YOLOv26
+﻿# Projeto Prático 2: Detecção em Partidas de Futebol com YOLOv26
 
 Este repositório apresenta a implementação do **Projeto Prático 2** da disciplina **Tópicos para Computação 1 (2026.1)**, orientado pela **Profa. Dra. Elloá B. Guedes** no **Centro de Tecnologia (EST/UEA)**.
 
