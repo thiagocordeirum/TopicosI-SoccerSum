@@ -1,140 +1,148 @@
-# Projeto Prático 2: Detecção e Segmentação em Partidas de Futebol com YOLOv26
+﻿# Projeto Prático 2: Detecção em Partidas de Futebol com YOLOv26
 
-Este repositório contém a implementação do **Projeto Prático 2 (YOLO26) da disciplina Tópicos para Computação 1 (2026.1)**, ministrada pela **Profa. Dra. Elloá B. Guedes** na **Escola Superior de Tecnologia (EST/UEA)**.
+Este repositório apresenta a implementação do **Projeto Prático 2** da disciplina **Tópicos para Computação 1 (2026.1)**, orientado pela **Profa. Dra. Elloá B. Guedes** no **Centro de Tecnologia (EST/UEA)**.
+
+O objetivo do projeto é aplicar a arquitetura **YOLOv26** para detecção de objetos e segmentação de instâncias em imagens de partidas de futebol, utilizando o dataset **Eliteserien**.
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do Repositório
+
+```text
+TopicosI-SoccerSum/
+│
+├── data/
+│   ├── Eliteserien/                 # Dataset bruto 
+│   ├── Eliteserien_partitioned/     # Dataset estruturado
+│   │   ├── images/                  # Frames da partida (.jpg) [train, val, test]
+│   │   └── labels/                  # Anotações em formato YOLO (.txt) [train, val, test]
+│   └── dataset.yaml                 # Configuração do mapeamento de dados e classes do YOLO
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_preparation.py          # Script de extração, split e validação dos dados
+│   ├── train.py                     # Script para disparar o treinamento da rede neural
+│   └── predict.py                   # Script para inferência e teste qualitativo com pesos .pt
+│
+├── .gitignore                       
+├── NotebookAP2_TEC1.ipynb           # Notebook de desenvolvimento e prototipagem
+└── README.md                        # Documentação do repositório
 
 ```
-├── Eliteserien/
-│   ├── 2021/
-│   ├── 2022/
-│   └── 2023/
-├── NotebookAP2_TEC1.ipynb
-├── .venv/
-└── README.md
+
+---
+
+## Objetivo do Projeto
+
+Detectar e segmentar objetos em imagens de futebol usando aprendizado de máquina. O modelo identifica as classes principais presentes nos jogos da liga norueguesa **Eliteserien**.
+
+### Classes do dataset
+
+- `0: Player`
+- `1: Goalkeeper`
+- `2: Referee`
+- `3: Ball`
+- `4: Logo`
+- `5: Penalty mark`
+- `6: Corner flag post`
+- `7: Goal net`
+
+---
+
+## Fluxo de Trabalho
+
+### 1. Preparação dos Dados
+
+O script `src/data_preparation.py` cria a partição do dataset em formato YOLO:
+
+- `train` → imagens de treino
+- `val` → imagens de validação
+- `test` → imagens de teste
+
+Ele percorre os diretórios de `Eliteserien/` e copia imagens e anotações de detecção para a estrutura esperada pelo Ultralytics.
+
+### 2. Configuração do Dataset
+
+O arquivo `data/dataset.yaml` define o caminho base e as pastas de cada split:
+
+- `train: images/train`
+- `val: images/val`
+- `test: images/test`
+
+Assim, o modelo usa os dados particionados corretamente durante o treinamento.
+
+### 3. Treinamento do Modelo
+
+O script `src/train.py` carrega pesos iniciais a partir de arquivos em `models/` e executa o treinamento com:
+
+- `epochs = 100`
+- `imgsz = 640`
+- `batch = 8`
+- `lr0 = 0.001`
+- `patience = 20`
+- `freeze = 10`
+
+O treinamento é realizado usando a biblioteca **Ultralytics YOLO** e salva resultados em `runs/`.
+
+---
+
+## Tecnologias e Bibliotecas
+
+- Python 3
+- Ultralytics YOLO (YOLOv26)
+- PyTorch
+- OpenCV
+- Matplotlib
+- Pandas
+
+---
+
+## Como Executar
+
+### Preparar o dataset
+
+```bash
+python src/data_preparation.py
 ```
 
-- **Eliteserien/** → Dataset contendo frames e anotações de detecção e segmentação (2021-2023)
-- **NotebookAP2_TEC1.ipynb** → Notebook contendo toda a implementação do treinamento e avaliação do modelo YOLOv8
-- **.venv/** → Ambiente virtual Python com as dependências do projeto
-- **README.md** → Documentação do projeto
+### Treinar o modelo
+
+```bash
+python src/train.py
+```
+
+> Certifique-se de que o ambiente virtual está ativo e que a biblioteca Ultralytics está instalada.
 
 ---
 
-## ⚙️ Descrição da Atividade
+## Resultados Esperados
 
-A atividade consiste na utilização da arquitetura **YOLOv8** para resolver problemas de **detecção de objetos e segmentação de instâncias** em partidas de futebol profissional.
+O projeto realiza:
 
-O experimento utiliza o **Eliteserien Dataset**, que contém imagens de partidas da liga principal da Noruega. O dataset é composto por 750 amostras balanceadas, focando em classes fundamentais para a análise de jogo:
-
-- **Ball** (Bola)
-- **Player** (Jogador)
-- **Referee** (Árbitro)
-- **Goalkeeper** (Goleiro)
-
-O objetivo principal é treinar um modelo robusto capaz de identificar e segmentar esses elementos, avaliando seu desempenho em cenários reais de transmissão esportiva.
+- partição do dataset em treino, validação e teste
+- treinamento de modelos YOLO com pesos iniciais
+- avaliação da performance em diferentes métricas de detecção e segmentação
+- análise qualitativa de predições em frames de futebol
 
 ---
 
-## 🔎 Etapas do Processamento
+## Observações
 
-### 🔸 Preparação do Dataset
-
-As imagens e anotações são organizadas seguindo o padrão esperado pelo framework **Ultralytics**. O dataset original foi particionado para garantir um equilíbrio entre as classes e os anos das partidas (2021, 2022 e 2023).
-
-As transformações aplicadas incluem:
-- Redimensionamento para **640x640** pixels
-- Normalização de cores
-- Organização em formato YOLO para detecção e segmentação
+- O dataset original está em `Eliteserien/` com imagens e anotações separadas por ano.
+- A estrutura final usada pelo treino é gerada em `data/Eliteserien_partitioned`.
+- Os pesos de modelo usados no treino estão em `models/`.
 
 ---
 
-### 🔸 Divisão dos Dados
-
-O dataset de 750 amostras foi dividido da seguinte forma:
-
-- **Treinamento (70%)** – 525 imagens utilizadas para o ajuste dos pesos do modelo.
-- **Validação (10%)** – 75 imagens utilizadas para monitoramento e ajuste de hiperparâmetros.
-- **Teste (20%)** – 150 imagens utilizadas para a avaliação final da capacidade de generalização.
-
----
-
-### 🔸 Arquitetura da Rede Neural
-
-Foi utilizada a arquitetura **YOLOv8 (You Only Look Once)**, especificamente as versões:
-- **YOLOv8n (nano)**: Para detecção de caixas delimitadoras (bounding boxes).
-- **YOLOv8n-seg**: Para segmentação de instâncias.
-
-O YOLOv8 é conhecido por sua alta eficiência e precisão em tempo real, sendo o estado da arte para tarefas de visão computacional em dispositivos com recursos limitados.
-
----
-
-### 🔸 Treinamento do Modelo
-
-O treinamento foi configurado com os seguintes parâmetros:
-
-- **Epochs**: 100
-- **Batch size**: 16
-- **Image size**: 640
-- **Otimizador**: Automático (SGD/AdamW)
-
-Durante o processo, foram registradas métricas de perda (loss) para coordenadas de caixa, classificação e máquinas de segmentação.
-
----
-
-### 🔸 Monitoramento do Treinamento
-
-O progresso foi monitorado através de gráficos gerados pelo framework:
-- Evolução da **Loss de Treinamento e Validação**
-- Curvas de **Precisão e Recall**
-- Gráficos de **mAP (mean Average Precision)**
-
-Essas métricas permitem identificar se o modelo está convergindo corretamente ou se há sinais de overfitting.
-
----
-
-### 🔸 Avaliação do Modelo
-
-Após o treinamento, os melhores pesos foram avaliados no conjunto de teste (150 imagens). As principais métricas de avaliação foram:
-
-- **Box mAP@50**: Precisão média para detecção com IoU de 0.5.
-- **Box mAP@50-95**: Média da precisão em diferentes limiares de IoU.
-- **Mask mAP@50/50-95**: Métricas equivalentes para a tarefa de segmentação.
-
----
-
-### 🔸 Análise de Predições
-
-Para validação qualitativa, o modelo foi testado em frames aleatórios do conjunto de teste, exibindo:
-- Caixas delimitadoras com as classes e scores de confiança.
-- Máscaras de segmentação sobrepostas aos jogadores e bola.
-
-Essa análise visual confirma a eficácia do modelo em lidar com oclusões e diferentes ângulos de câmera típicos de transmisões de futebol.
-
----
-
-## 🧰 Tecnologias Utilizadas
-
-- **Python**
-- **Ultralytics (YOLOv26)** – Framework principal para visão computacional
-- **OpenCV** – Processamento de imagens e vídeos
-- **Matplotlib** – Visualização de resultados e gráficos
-- **Pandas** – Manipulação de dados de anotação
-- **PyTorch** – Engine de backend para processamento em GPU/CPU
-
----
-
-## 👥 Autores
+## Autores
 
 | [<img src="https://github.com/thiagocordeirum.png?size=100" width=100><br><sub>Thiago Cordeiro</sub>](https://github.com/thiagocordeirum) | [<img src="https://github.com/beatrizguedes03.png?size=100" width=100><br><sub>Beatriz Guedes</sub>](https://github.com/beatrizguedes03) | [<img src="https://github.com/yagofeitoza19.png?size=100" width=100><br><sub>Yago Feitoza</sub>](https://github.com/yagofeitoza19) | [<img src="https://github.com/ordozgoite.png?size=100" width=100><br><sub>Victor Ordozgoite</sub>](https://github.com/ordozgoite) | [<img src="https://github.com/ItaloFonseca.png?size=100" width=100><br><sub>Italo Fonseca</sub>](https://github.com/ItaloFonseca)
 |:---:|:---:|:---:|:---:|:---:|
 
 ---
 
-## 👩‍🏫 Orientação
+## Orientação
 
-- Orientador(a): **Profa. Dra. Elloá B. Guedes**
-- Instituição: **Escola Superior de Tecnologia – Universidade do Estado do Amazonas (EST/UEA)**
-- Data: **Junho de 2026**
+- **Profa. Dra. Elloá B. Guedes**
+- **Escola Superior de Tecnologia – Universidade do Estado do Amazonas (EST/UEA)**
+- **Junho de 2026**
