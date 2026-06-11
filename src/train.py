@@ -6,7 +6,7 @@ from ultralytics import YOLO
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATASET_CONFIG = BASE_DIR / "data" / "dataset.yaml"
 MODELS_DIR = BASE_DIR / "models"
-RUNS_DIR = BASE_DIR / "runs"
+RUNS_DIR = BASE_DIR / "runs/detect/runs"
 
 MODELS = [
     MODELS_DIR / "yolo26n.pt",
@@ -25,12 +25,12 @@ WORKERS = 2
 
 PROJECT_NAME = "runs"
 
-def train_model(model_path: Path) -> None:
+def train_model(model_path: Path, version: str) -> None:
     """
     Train a single YOLO model.
     """
 
-    experiment_name = Path(model_path).stem
+    experiment_name = f"{Path(model_path).stem}_{version}"
 
     model = YOLO(str(model_path))
 
@@ -62,7 +62,7 @@ def train() -> None:
         print(f"\nTraining {model_name}")
         print("-" * 50)
 
-        train_model(model_name)
+        train_model(model_name, version="")
 
 
 if __name__ == "__main__":
